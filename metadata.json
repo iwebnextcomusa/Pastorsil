@@ -1,0 +1,6 @@
+{
+  "name": "Pastorsil Real Estate",
+  "description": "Cincinnati's premier real estate platform for buyers, sellers, luxury homes, and rentals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

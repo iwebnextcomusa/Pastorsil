@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-serif-display {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  .font-sans-body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+/* Sophisticated Dark Theme Color Utilities & Helper Classes */
+.bg-navy-dark {
+  background-color: #0A192F;
+}
+
+.bg-navy-panel {
+  background-color: #112240;
+}
+
+.bg-navy-card {
+  background-color: #1a2c4e;
+}
+
+.bg-gold-accent {
+  background-color: #C5A059;
+}
+
+.bg-gold-accent-hover:hover {
+  background-color: #b38f4d;
+}
+
+.text-gold-accent {
+  color: #C5A059;
+}
+
+.border-gold-accent {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #d8b065 0%, #c5a059 50%, #a27f3b 100%);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f0d592 0%, #c5a059 50%, #9e7a33 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-panel {
+  background: rgba(10, 25, 47, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(197, 160, 89, 0.2);
+}
+
+.glass-card {
+  background: rgba(17, 34, 64, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A192F;
+}
+::-webkit-scrollbar-thumb {
+  background: #112240;
+  border-radius: 4px;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+
