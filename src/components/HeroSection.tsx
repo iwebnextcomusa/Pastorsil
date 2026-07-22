@@ -29,11 +29,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, setAct
 
   return (
     <div className="relative min-h-[85vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A192F]">
-      {/* Background Image with Overlay */}
+      {/* Background Video/Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920"
-          alt="Cincinnati Luxury Real Estate"
+        <video
+          src="https://yrbm7hltmjwukvhw.public.blob.vercel-storage.com/Create_ad_video_Pastorsil_202607222358.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A192F]/95 via-[#0A192F]/80 to-[#0A192F]/60 z-10" />

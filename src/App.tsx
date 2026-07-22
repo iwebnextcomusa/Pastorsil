@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
@@ -149,124 +150,44 @@ export const App: React.FC = () => {
         onOpenCompareModal={() => setIsComparisonModalOpen(true)}
       />
 
-      {/* Main Page Router View Body */}
-      <main className="flex-1">
-        {activeTab === 'home' && (
-          <div>
-            <HeroSection
-              onSearchSubmit={(partialFilters) => {
-                setFilters((prev) => ({ ...prev, ...partialFilters }));
-              }}
-              setActiveTab={setActiveTab}
-            />
-
-            {/* Featured Listings Showcase Section */}
-            <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-              <div className="flex justify-between items-end mb-6">
-                <div className="flex flex-col">
-                  <h2 className="text-white text-3xl font-serif">Featured Collections</h2>
-                  <div className="h-1 w-12 bg-[#C5A059] mt-2"></div>
-                </div>
-                <button
-                  onClick={() => setActiveTab('listings')}
-                  className="text-white text-xs font-bold uppercase tracking-widest border-b border-[#C5A059] text-[#C5A059] hover:text-[#b38f4d] flex items-center gap-1.5 pb-1"
-                >
-                  <span>Explore All ({CINCINNATI_PROPERTIES.length})</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Grid of Featured Homes */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {CINCINNATI_PROPERTIES.filter((p) => p.isFeatured).slice(0, 3).map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                    isFavorite={favorites.includes(property.id)}
-                    onToggleFavorite={handleToggleFavorite}
-                    isCompared={comparedProperties.some((p) => p.id === property.id)}
-                    onToggleCompare={handleToggleCompare}
-                    onSelectProperty={(p) => setSelectedPropertyDetail(p)}
-                    onScheduleShowing={(p) => setScheduleShowingProperty(p)}
-                  />
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-
-        {activeTab === 'listings' && (
-          <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      {/* Main Page Router View Body with Framer Motion Page Transitions */}
+      <main className="flex-1 relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
+            {activeTab === 'home' && (
               <div>
-                <h1 className="text-3xl sm:text-4xl font-serif-display font-bold text-white">
-                  Cincinnati Real Estate <span className="text-gold-gradient">Listings</span>
-                </h1>
-                <p className="text-slate-400 text-xs mt-1">
-                  Browse luxury single family homes, riverfront condos, and townhomes across Hamilton County.
-                </p>
-              </div>
+                <HeroSection
+                  onSearchSubmit={(partialFilters) => {
+                    setFilters((prev) => ({ ...prev, ...partialFilters }));
+                  }}
+                  setActiveTab={setActiveTab}
+                />
 
-              {/* Grid vs Map Toggle */}
-              <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    viewMode === 'grid'
-                      ? 'bg-gold-gradient text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <LayoutGrid className="w-3.5 h-3.5" />
-                  <span>Grid</span>
-                </button>
-                <button
-                  onClick={() => setViewMode('map')}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    viewMode === 'map'
-                      ? 'bg-gold-gradient text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Map className="w-3.5 h-3.5" />
-                  <span>Interactive Map</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Filter Bar */}
-            <PropertyFilter
-              filters={filters}
-              onFilterChange={setFilters}
-              onResetFilters={handleResetFilters}
-              totalResultsCount={filteredProperties.length}
-            />
-
-            {/* Content View: Grid or Map */}
-            {viewMode === 'map' ? (
-              <InteractiveMap
-                properties={filteredProperties}
-                onSelectProperty={(p) => setSelectedPropertyDetail(p)}
-              />
-            ) : (
-              <div>
-                {filteredProperties.length === 0 ? (
-                  <div className="glass-panel rounded-2xl p-12 text-center space-y-4 border border-slate-800">
-                    <Building2 className="w-12 h-12 text-amber-400 mx-auto" />
-                    <h3 className="text-xl font-serif-display font-bold text-white">No properties match your filter criteria</h3>
-                    <p className="text-slate-400 text-xs max-w-sm mx-auto">
-                      Try adjusting price range, neighborhood selection, or resetting your filter options.
-                    </p>
+                {/* Featured Listings Showcase Section */}
+                <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                  <div className="flex justify-between items-end mb-6">
+                    <div className="flex flex-col">
+                      <h2 className="text-white text-3xl font-serif">Featured Collections</h2>
+                      <div className="h-1 w-12 bg-[#C5A059] mt-2"></div>
+                    </div>
                     <button
-                      onClick={handleResetFilters}
-                      className="px-5 py-2 rounded-xl bg-gold-gradient text-slate-950 font-bold text-xs"
+                      onClick={() => setActiveTab('listings')}
+                      className="text-white text-xs font-bold uppercase tracking-widest border-b border-[#C5A059] text-[#C5A059] hover:text-[#b38f4d] flex items-center gap-1.5 pb-1"
                     >
-                      Reset All Filters
+                      <span>Explore All ({CINCINNATI_PROPERTIES.length})</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                ) : (
+
+                  {/* Grid of Featured Homes */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredProperties.map((property) => (
+                    {CINCINNATI_PROPERTIES.filter((p) => p.isFeatured).slice(0, 3).map((property) => (
                       <PropertyCard
                         key={property.id}
                         property={property}
@@ -279,36 +200,126 @@ export const App: React.FC = () => {
                       />
                     ))}
                   </div>
+                </section>
+              </div>
+            )}
+
+            {activeTab === 'listings' && (
+              <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h1 className="text-3xl sm:text-4xl font-serif-display font-bold text-white">
+                      Cincinnati Real Estate <span className="text-gold-gradient">Listings</span>
+                    </h1>
+                    <p className="text-slate-400 text-xs mt-1">
+                      Browse luxury single family homes, riverfront condos, and townhomes across Hamilton County.
+                    </p>
+                  </div>
+
+                  {/* Grid vs Map Toggle */}
+                  <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        viewMode === 'grid'
+                          ? 'bg-gold-gradient text-slate-950 shadow-sm'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <LayoutGrid className="w-3.5 h-3.5" />
+                      <span>Grid</span>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('map')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        viewMode === 'map'
+                          ? 'bg-gold-gradient text-slate-950 shadow-sm'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Map className="w-3.5 h-3.5" />
+                      <span>Interactive Map</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Filter Bar */}
+                <PropertyFilter
+                  filters={filters}
+                  onFilterChange={setFilters}
+                  onResetFilters={handleResetFilters}
+                  totalResultsCount={filteredProperties.length}
+                />
+
+                {/* Content View: Grid or Map */}
+                {viewMode === 'map' ? (
+                  <InteractiveMap
+                    properties={filteredProperties}
+                    onSelectProperty={(p) => setSelectedPropertyDetail(p)}
+                  />
+                ) : (
+                  <div>
+                    {filteredProperties.length === 0 ? (
+                      <div className="glass-panel rounded-2xl p-12 text-center space-y-4 border border-slate-800">
+                        <Building2 className="w-12 h-12 text-amber-400 mx-auto" />
+                        <h3 className="text-xl font-serif-display font-bold text-white">No properties match your filter criteria</h3>
+                        <p className="text-slate-400 text-xs max-w-sm mx-auto">
+                          Try adjusting price range, neighborhood selection, or resetting your filter options.
+                        </p>
+                        <button
+                          onClick={handleResetFilters}
+                          className="px-5 py-2 rounded-xl bg-gold-gradient text-slate-950 font-bold text-xs"
+                        >
+                          Reset All Filters
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredProperties.map((property) => (
+                          <PropertyCard
+                            key={property.id}
+                            property={property}
+                            isFavorite={favorites.includes(property.id)}
+                            onToggleFavorite={handleToggleFavorite}
+                            isCompared={comparedProperties.some((p) => p.id === property.id)}
+                            onToggleCompare={handleToggleCompare}
+                            onSelectProperty={(p) => setSelectedPropertyDetail(p)}
+                            onScheduleShowing={(p) => setScheduleShowingProperty(p)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             )}
-          </div>
-        )}
 
-        {activeTab === 'buy' && <BuyPage setActiveTab={setActiveTab} />}
-        {activeTab === 'sell' && <SellPage />}
-        {activeTab === 'rentals' && (
-          <RentalsPage
-            rentals={rentalProperties}
-            favorites={favorites}
-            onToggleFavorite={handleToggleFavorite}
-            comparedProperties={comparedProperties}
-            onToggleCompare={handleToggleCompare}
-            onSelectProperty={(p) => setSelectedPropertyDetail(p)}
-            onScheduleShowing={(p) => setScheduleShowingProperty(p)}
-          />
-        )}
-        {activeTab === 'neighborhoods' && (
-          <NeighborhoodsPage
-            onSelectNeighborhood={(n) => {
-              setFilters((prev) => ({ ...prev, neighborhood: n }));
-            }}
-            setActiveTab={setActiveTab}
-          />
-        )}
-        {activeTab === 'blog' && <BlogPage />}
-        {activeTab === 'about' && <AboutPage />}
-        {activeTab === 'contact' && <ContactPage />}
+            {activeTab === 'buy' && <BuyPage setActiveTab={setActiveTab} />}
+            {activeTab === 'sell' && <SellPage />}
+            {activeTab === 'rentals' && (
+              <RentalsPage
+                rentals={rentalProperties}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                comparedProperties={comparedProperties}
+                onToggleCompare={handleToggleCompare}
+                onSelectProperty={(p) => setSelectedPropertyDetail(p)}
+                onScheduleShowing={(p) => setScheduleShowingProperty(p)}
+              />
+            )}
+            {activeTab === 'neighborhoods' && (
+              <NeighborhoodsPage
+                onSelectNeighborhood={(n) => {
+                  setFilters((prev) => ({ ...prev, neighborhood: n }));
+                }}
+                setActiveTab={setActiveTab}
+              />
+            )}
+            {activeTab === 'blog' && <BlogPage />}
+            {activeTab === 'about' && <AboutPage />}
+            {activeTab === 'contact' && <ContactPage />}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Footer */}
