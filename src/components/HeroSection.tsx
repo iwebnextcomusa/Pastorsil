@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PropertyFilterState } from '../types';
-import { Search, MapPin, Building2, ShieldCheck, Award, ArrowRight, Sparkles, KeyRound, TrendingUp } from 'lucide-react';
+import { Search, MapPin, Building2, ShieldCheck, Award, ArrowRight, Sparkles, KeyRound, TrendingUp, Volume2, VolumeX } from 'lucide-react';
 
 interface HeroSectionProps {
   onSearchSubmit: (filter: Partial<PropertyFilterState>) => void;
@@ -11,6 +11,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, setAct
   const [searchIntent, setSearchIntent] = useState<'buy' | 'rent' | 'valuation'>('buy');
   const [neighborhood, setNeighborhood] = useState('');
   const [propertyType, setPropertyType] = useState('');
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,15 +41,36 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, setAct
       {/* Background Video/Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <video
+          ref={videoRef}
           src="https://yrbm7hltmjwukvhw.public.blob.vercel-storage.com/Create_ad_video_Pastorsil_202607222358.mp4"
           autoPlay
           loop
-          muted
+          muted={isMuted}
           playsInline
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A192F]/95 via-[#0A192F]/80 to-[#0A192F]/60 z-10" />
       </div>
+
+      {/* Video Mute/Unmute Control Button */}
+      <button
+        onClick={toggleMute}
+        type="button"
+        aria-label={isMuted ? 'Unmute video sound' : 'Mute video sound'}
+        className="absolute bottom-4 right-4 z-30 sm:bottom-6 sm:right-6 flex items-center gap-2 px-3 py-2 rounded-sm bg-[#0A192F]/85 hover:bg-[#112240] text-white border border-[#C5A059]/40 text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-xl transition-all cursor-pointer"
+      >
+        {isMuted ? (
+          <>
+            <VolumeX className="w-4 h-4 text-[#C5A059]" />
+            <span className="hidden sm:inline">Unmute Audio</span>
+          </>
+        ) : (
+          <>
+            <Volume2 className="w-4 h-4 text-[#C5A059]" />
+            <span className="hidden sm:inline">Mute Audio</span>
+          </>
+        )}
+      </button>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
         <div className="text-center max-w-3xl mx-auto space-y-6">
